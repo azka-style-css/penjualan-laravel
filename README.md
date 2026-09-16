@@ -3,7 +3,7 @@
 | Framework | Laravel |
 | Database | MySQL |
 
-###Panduan
+### Panduan
 composer install
 cp .env.example .env
 php artisan key:generate
