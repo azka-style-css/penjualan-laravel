@@ -44,7 +44,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark no-print" style="background:#0f766e;">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('dashboard') }}">
-                <i class="bi bi-shop me-1"></i> Toko RPL Jaya
+                <i class="bi bi-shop me-1"></i> Kasir Simple
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                 <span class="navbar-toggler-icon"></span>
