@@ -3,75 +3,76 @@
 @section('title', 'Data Barang')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
+<header class="page-head">
     <div>
-        <h1 class="h3 mb-1">Data Barang</h1>
-        <p class="text-muted mb-0">Kelola stok dan harga barang toko</p>
+        <h1 class="page-title">Data Barang</h1>
+        <p class="page-sub">Kelola stok dan harga barang toko</p>
     </div>
     <a href="{{ route('barang.create') }}" class="btn btn-primary">
-        <i class="bi bi-plus-lg"></i> Tambah Barang
+        <i class="bi bi-plus-lg" aria-hidden="true"></i> Tambah Barang
     </a>
-</div>
+</header>
 
-<div class="card page-card">
-    <div class="card-body">
-        <form method="GET" action="{{ route('barang.index') }}" class="row g-2 mb-3">
-            <div class="col-md-6">
-                <input type="text" name="search" value="{{ $search }}" class="form-control" placeholder="Cari nama atau kode barang...">
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-outline-primary">Cari</button>
-            </div>
-            @if ($search !== '')
-                <div class="col-auto">
-                    <a href="{{ route('barang.index') }}" class="btn btn-outline-secondary">Reset</a>
-                </div>
-            @endif
-        </form>
-
-        <div class="table-responsive">
-            <table class="table table-striped align-middle">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Kode Barang</th>
-                        <th>Nama Barang</th>
-                        <th>Harga</th>
-                        <th>Stok</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($barangs as $barang)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $barang->kode_barang }}</td>
-                            <td>{{ $barang->nama_barang }}</td>
-                            <td>{{ formatRupiah($barang->harga) }}</td>
-                            <td>
-                                @if ($barang->stok <= 5)
-                                    <span class="badge text-bg-warning">{{ $barang->stok }}</span>
-                                @else
-                                    {{ $barang->stok }}
-                                @endif
-                            </td>
-                            <td class="d-flex gap-2">
-                                <a href="{{ route('barang.edit', $barang->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                <form action="{{ route('barang.destroy', $barang->id) }}" method="POST" onsubmit="return confirm('Hapus barang {{ $barang->nama_barang }}?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-muted py-4">Data barang tidak ditemukan.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+<form method="GET" action="{{ route('barang.index') }}" class="mb-5 flex flex-wrap items-end gap-2" role="search">
+    <div class="w-full sm:w-auto sm:min-w-72">
+        <label for="search" class="label">Cari barang</label>
+        <input type="search" id="search" name="search" value="{{ $search }}" class="input"
+               placeholder="Nama atau kode barang…">
     </div>
+    <button type="submit" class="btn btn-outline">
+        <i class="bi bi-search" aria-hidden="true"></i> Cari
+    </button>
+    @if (filled($search))
+        <a href="{{ route('barang.index') }}" class="btn btn-outline">Reset</a>
+    @endif
+</form>
+
+<div class="table-wrap">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Kode Barang</th>
+                <th scope="col">Nama Barang</th>
+                <th scope="col" class="col-num">Harga</th>
+                <th scope="col">Stok</th>
+                <th scope="col" class="col-act">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($barangs as $barang)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td class="code">{{ $barang->kode_barang }}</td>
+                    <td>{{ $barang->nama_barang }}</td>
+                    <td class="col-num">{{ formatRupiah($barang->harga) }}</td>
+                    <td>
+                        @if ($barang->stok <= 5)
+                            <span class="badge badge-warn">{{ $barang->stok }}</span>
+                        @else
+                            {{ $barang->stok }}
+                        @endif
+                    </td>
+                    <td class="col-act">
+                        <div class="cell-actions">
+                            <a href="{{ route('barang.edit', $barang->id) }}" class="btn btn-sm btn-outline">Ubah</a>
+                            <form action="{{ route('barang.destroy', $barang->id) }}" method="POST"
+                                  data-confirm-title="Hapus barang"
+                                  data-confirm="Barang “{{ $barang->nama_barang }}” akan dihapus permanen dan tidak bisa dikembalikan."
+                                  data-confirm-action="Ya, hapus">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6" class="empty-cell">Data barang tidak ditemukan.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
 </div>
 @endsection

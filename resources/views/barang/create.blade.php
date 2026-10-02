@@ -3,48 +3,71 @@
 @section('title', 'Tambah Barang')
 
 @section('content')
-<div class="mb-4">
-    <h1 class="h3 mb-1">Tambah Barang</h1>
-    <p class="text-muted mb-0">Masukkan data barang baru</p>
-</div>
-
-<div class="card page-card">
-    <div class="card-body">
-        <form action="{{ route('barang.store') }}" method="POST" class="row g-3">
-            @csrf
-            <div class="col-md-6">
-                <label for="kode_barang" class="form-label">Kode Barang</label>
-                <input type="text" name="kode_barang" id="kode_barang" value="{{ old('kode_barang') }}" class="form-control @error('kode_barang') is-invalid @enderror" maxlength="20" required>
-                @error('kode_barang')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="col-md-6">
-                <label for="nama_barang" class="form-label">Nama Barang</label>
-                <input type="text" name="nama_barang" id="nama_barang" value="{{ old('nama_barang') }}" class="form-control @error('nama_barang') is-invalid @enderror" maxlength="100" required>
-                @error('nama_barang')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="col-md-6">
-                <label for="harga" class="form-label">Harga</label>
-                <input type="number" name="harga" id="harga" value="{{ old('harga') }}" class="form-control @error('harga') is-invalid @enderror" min="0" step="1" required>
-                @error('harga')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="col-md-6">
-                <label for="stok" class="form-label">Stok</label>
-                <input type="number" name="stok" id="stok" value="{{ old('stok') }}" class="form-control @error('stok') is-invalid @enderror" min="0" step="1" required>
-                @error('stok')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="col-12 d-flex gap-2">
-                <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('barang.index') }}" class="btn btn-outline-secondary">Cancel</a>
-            </div>
-        </form>
+<header class="page-head">
+    <div>
+        <h1 class="page-title">Tambah Barang</h1>
+        <p class="page-sub">Masukkan data barang baru</p>
     </div>
-</div>
+</header>
+
+<form action="{{ route('barang.store') }}" method="POST" data-guard>
+    @csrf
+    <p class="hint-text mb-4">Kolom bertanda <span class="req" aria-hidden="true">*</span> wajib diisi.</p>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+            <label for="kode_barang" class="label">Kode Barang <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" name="kode_barang" id="kode_barang" value="{{ old('kode_barang') }}"
+                   class="input code @error('kode_barang') input-error @enderror" maxlength="20"
+                   required aria-required="true"
+                   @error('kode_barang') aria-invalid="true" aria-describedby="err-kode" @enderror>
+            @error('kode_barang')
+                <p class="error-text" id="err-kode">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div>
+            <label for="nama_barang" class="label">Nama Barang <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" name="nama_barang" id="nama_barang" value="{{ old('nama_barang') }}"
+                   class="input @error('nama_barang') input-error @enderror" maxlength="100"
+                   required aria-required="true"
+                   @error('nama_barang') aria-invalid="true" aria-describedby="err-nama" @enderror>
+            @error('nama_barang')
+                <p class="error-text" id="err-nama">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div>
+            <label for="harga" class="label">Harga <span class="req" aria-hidden="true">*</span></label>
+            <div class="input-group">
+                <span class="input-addon">Rp</span>
+                <input type="number" name="harga" id="harga" value="{{ old('harga') }}"
+                       class="input @error('harga') input-error @enderror" min="0" step="1"
+                       required aria-required="true" inputmode="numeric"
+                       @error('harga') aria-invalid="true" aria-describedby="err-harga" @enderror>
+            </div>
+            @error('harga')
+                <p class="error-text" id="err-harga">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div>
+            <label for="stok" class="label">Stok <span class="req" aria-hidden="true">*</span></label>
+            <input type="number" name="stok" id="stok" value="{{ old('stok') }}"
+                   class="input @error('stok') input-error @enderror" min="0" step="1"
+                   required aria-required="true" inputmode="numeric"
+                   @error('stok') aria-invalid="true" aria-describedby="err-stok" @enderror>
+            @error('stok')
+                <p class="error-text" id="err-stok">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary" data-guard-btn data-loading-label="Menyimpan…">
+            <i class="bi bi-save" aria-hidden="true"></i> Simpan
+        </button>
+        <a href="{{ route('barang.index') }}" class="btn btn-outline">Batal</a>
+    </div>
+</form>
 @endsection

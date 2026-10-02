@@ -3,94 +3,63 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
+<header class="page-head">
     <div>
-        <h1 class="h3 mb-1">Dashboard</h1>
-        <p class="text-muted mb-0">Ringkasan penjualan Toko RPL Jaya</p>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-sub">Ringkasan penjualan Toko RPL Jaya</p>
     </div>
-    <a href="{{ route('transaksi.create') }}" class="btn btn-success">
-        <i class="bi bi-cart-plus"></i> Transaksi Baru
+    <a href="{{ route('transaksi.create') }}" class="btn btn-primary no-print">
+        <i class="bi bi-cart-plus" aria-hidden="true"></i> Transaksi Baru
     </a>
-</div>
+</header>
 
-<div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="card stat-card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <p class="text-muted mb-1">Total Barang</p>
-                        <h2 class="mb-0">{{ $totalBarang }}</h2>
-                    </div>
-                    <div class="fs-1 text-primary"><i class="bi bi-box-seam"></i></div>
-                </div>
-            </div>
-        </div>
+<section class="stats-strip" aria-label="Statistik toko">
+    <div class="stat-cell">
+        <p class="stat-label">Total Penjualan</p>
+        <p class="stat-value-lg" data-countup="{{ (int) $totalPenjualan }}" data-prefix="Rp ">{{ formatRupiah($totalPenjualan) }}</p>
     </div>
-    <div class="col-md-4">
-        <div class="card stat-card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <p class="text-muted mb-1">Total Transaksi</p>
-                        <h2 class="mb-0">{{ $totalTransaksi }}</h2>
-                    </div>
-                    <div class="fs-1 text-info"><i class="bi bi-receipt"></i></div>
-                </div>
-            </div>
-        </div>
+    <div class="stat-cell">
+        <p class="stat-label">Total Barang</p>
+        <p class="stat-value" data-countup="{{ (int) $totalBarang }}">{{ number_format((int) $totalBarang, 0, ',', '.') }}</p>
     </div>
-    <div class="col-md-4">
-        <div class="card stat-card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <p class="text-muted mb-1">Total Penjualan</p>
-                        <h2 class="mb-0">{{ formatRupiah($totalPenjualan) }}</h2>
-                    </div>
-                    <div class="fs-1 text-success"><i class="bi bi-cash-stack"></i></div>
-                </div>
-            </div>
-        </div>
+    <div class="stat-cell">
+        <p class="stat-label">Total Transaksi</p>
+        <p class="stat-value" data-countup="{{ (int) $totalTransaksi }}">{{ number_format((int) $totalTransaksi, 0, ',', '.') }}</p>
     </div>
-</div>
+</section>
 
-<div class="card page-card">
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-        <h2 class="h5 mb-0"><i class="bi bi-exclamation-triangle text-warning me-2"></i>Peringatan Stok Menipis</h2>
-        <span class="badge text-bg-warning">stok &le; 5</span>
+<section aria-labelledby="stokMenipis">
+    <div class="section-head">
+        <h2 class="section-title" id="stokMenipis">Peringatan Stok Menipis</h2>
+        <span class="badge badge-warn">stok ≤ 5</span>
     </div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Kode Barang</th>
+                    <th scope="col">Nama Barang</th>
+                    <th scope="col" class="col-num">Harga</th>
+                    <th scope="col">Stok</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($lowStockBarangs as $barang)
                     <tr>
-                        <th>No</th>
-                        <th>Kode Barang</th>
-                        <th>Nama Barang</th>
-                        <th>Harga</th>
-                        <th>Stok</th>
+                        <td>{{ $loop->iteration }}</td>
+                        <td class="code">{{ $barang->kode_barang }}</td>
+                        <td>{{ $barang->nama_barang }}</td>
+                        <td class="col-num">{{ formatRupiah($barang->harga) }}</td>
+                        <td><span class="badge badge-danger">{{ $barang->stok }}</span></td>
                     </tr>
-                </thead>
-                <tbody>
-                    @forelse ($lowStockBarangs as $barang)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $barang->kode_barang }}</td>
-                            <td>{{ $barang->nama_barang }}</td>
-                            <td>{{ formatRupiah($barang->harga) }}</td>
-                            <td>
-                                <span class="badge text-bg-danger">{{ $barang->stok }}</span>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center text-muted py-4">Tidak ada barang dengan stok menipis.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                @empty
+                    <tr>
+                        <td colspan="5" class="empty-cell">Tidak ada barang dengan stok menipis.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
-</div>
+</section>
 @endsection

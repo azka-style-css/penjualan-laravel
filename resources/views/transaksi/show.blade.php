@@ -2,69 +2,68 @@
 
 @section('title', 'Detail Transaksi')
 
-@section('styles')
-<style>
-    @media print {
-        .receipt-paper { box-shadow: none !important; }
-    }
-</style>
-@endsection
-
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4 no-print">
+<header class="page-head no-print">
     <div>
-        <h1 class="h3 mb-1">Detail Transaksi</h1>
-        <p class="text-muted mb-0">{{ $transaksi->nomor_transaksi }}</p>
+        <h1 class="page-title">Detail Transaksi</h1>
+        <p class="page-sub code">{{ $transaksi->nomor_transaksi }}</p>
     </div>
-    <div class="d-flex gap-2">
-        <button type="button" class="btn btn-outline-primary" onclick="window.print()">
-            <i class="bi bi-printer"></i> Print
+    <div class="flex gap-2">
+        <button type="button" class="btn btn-primary" onclick="window.print()">
+            <i class="bi bi-printer" aria-hidden="true"></i> Cetak
         </button>
-        <a href="{{ route('transaksi.index') }}" class="btn btn-outline-secondary">Back</a>
+        <a href="{{ route('transaksi.index') }}" class="btn btn-outline">Kembali</a>
     </div>
-</div>
+</header>
 
-<div class="card page-card receipt-paper">
-    <div class="card-body">
-        <div class="text-center mb-4">
-            <h2 class="h4 mb-1">Toko RPL Jaya</h2>
-            <p class="text-muted mb-0">Struk Penjualan</p>
+<div class="receipt">
+    <p class="receipt-store">Toko RPL Jaya</p>
+    <p class="receipt-sub">Struk Penjualan</p>
+
+    <div class="receipt-rule" role="presentation"></div>
+
+    <div class="receipt-meta">
+        <div class="flex justify-between gap-3">
+            <span>No. Transaksi</span>
+            <span>{{ $transaksi->nomor_transaksi }}</span>
         </div>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <div><strong>Nomor Transaksi:</strong> {{ $transaksi->nomor_transaksi }}</div>
-                <div><strong>Tanggal:</strong> {{ $transaksi->tanggal->format('d-m-Y') }}</div>
-            </div>
+        <div class="flex justify-between gap-3">
+            <span>Tanggal</span>
+            <span>{{ $transaksi->tanggal->format('d-m-Y') }}</span>
         </div>
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nama Barang</th>
-                        <th>Harga Satuan</th>
-                        <th>Jumlah</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($transaksi->detailTransaksis as $detail)
-                        <tr>
-                            <td>{{ $detail->barang->nama_barang ?? '-' }}</td>
-                            <td>{{ formatRupiah($detail->harga) }}</td>
-                            <td>{{ $detail->jumlah }}</td>
-                            <td>{{ formatRupiah($detail->subtotal) }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="3" class="text-end">Grand Total</th>
-                        <th>{{ formatRupiah($grandTotal) }}</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-        <p class="text-center text-muted mb-0">Terima kasih telah berbelanja di Toko RPL Jaya.</p>
     </div>
+
+    <div class="receipt-rule" role="presentation"></div>
+
+    <table class="receipt-table">
+        <thead>
+            <tr>
+                <th scope="col">Item</th>
+                <th scope="col" class="r">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($transaksi->detailTransaksis as $detail)
+                <tr>
+                    <td>
+                        {{ $detail->barang->nama_barang ?? '-' }}<br>
+                        <span class="text-muted">{{ formatRupiah($detail->harga) }} × {{ $detail->jumlah }}</span>
+                    </td>
+                    <td class="r">{{ formatRupiah($detail->subtotal) }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <div class="receipt-rule" role="presentation"></div>
+
+    <div class="receipt-total">
+        <span>Total</span>
+        <span>{{ formatRupiah($grandTotal) }}</span>
+    </div>
+
+    <div class="receipt-rule" role="presentation"></div>
+
+    <p class="receipt-foot">Terima kasih telah berbelanja di Toko RPL Jaya</p>
 </div>
 @endsection

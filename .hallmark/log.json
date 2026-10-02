@@ -1,0 +1,18 @@
+[
+  {
+    "date": "2026-10-02",
+    "macrostructure": "Workbench",
+    "theme": "custom (brand teal oklch(51% 0.096 186))",
+    "scope": "app",
+    "enrichment": "none",
+    "brief": "Iterasi minimal: kartu dibuang — tabel/form/stat langsung di atas paper ber-hairline; radius 0 untuk kontainer, pill hanya tombol & badge; semua komentar kode dibersihkan"
+  },
+  {
+    "date": "2026-10-02",
+    "macrostructure": "Workbench",
+    "theme": "custom (brand teal oklch(51% 0.096 186))",
+    "scope": "app",
+    "enrichment": "none",
+    "brief": "Kasir Simple · Toko RPL Jaya — redesign multi-halaman pasca-audit; Tailwind v4 non-CDN via Vite; design.md terkunci; backend tidak disentuh"
+  }
+]

@@ -3,15 +3,6 @@
 | Framework | Laravel |
 | Database | MySQL |
 
-### Panduan
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate --seed
-php artisan serve
-
-browser: `http://127.0.0.1:8000`
-
 ### Screenshot
 | Daftar Barang | [md_resource/daftar_barang.png](md_resource/daftar_barang.png) |
 | Form Tambah Barang | [md_resource/form_tambah_barang.png](md_resource/form_tambah_barang.png) |
